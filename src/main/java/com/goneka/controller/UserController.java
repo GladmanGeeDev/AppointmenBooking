@@ -1,6 +1,7 @@
 package com.goneka.controller;
 
 
+import com.goneka.exception.UserException;
 import com.goneka.model.User;
 import com.goneka.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -32,7 +33,7 @@ public class UserController {
         if(otp.isPresent()) {
             return otp.get();
         } else {
-            throw new Exception("User not found");
+            throw new UserException("User not found");
         }
     }
 
@@ -42,7 +43,7 @@ public class UserController {
 
         Optional<User> otp = userRepository.findById(id);
         if(otp.isEmpty()) {
-            throw new Exception("User not found with id" + id);
+            throw new UserException("User not found with id" + id);
         }
         User existingUser = otp.get();
 
@@ -57,7 +58,7 @@ public class UserController {
     public String deleteUserById(@PathVariable Long id) throws Exception {
         Optional<User> otp = userRepository.findById(id);
         if(otp.isEmpty()) {
-            throw new Exception("User not found with id" + id);
+            throw new UserException("User not found with id" + id);
         }
         userRepository.deleteById(otp.get().getId());
         return "User deleted successfully";
