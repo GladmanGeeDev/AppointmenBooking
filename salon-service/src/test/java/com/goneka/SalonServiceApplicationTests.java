@@ -1,4 +1,4 @@
-package com.goneka.salon.service;
+package com.goneka;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
