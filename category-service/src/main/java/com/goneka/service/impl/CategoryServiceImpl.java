@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Set<Category> getAllCategoriesBySalon(SalonDTO salonDTO) {
+    public Set<Category> getAllCategoriesBySalon(Long salonDTO) {
         return categoryRepository.findBySalonId(salonDTO.getId());
     }
 
