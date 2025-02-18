@@ -37,6 +37,7 @@ public class SalonController {
 
         UserDTO userDTO = new UserDTO();
         userDTO.setId(1L);
+
         Salon salon = salonService.updateSalon(salonDTO, userDTO, salonId);
         SalonDTO salonDTO1 = SalonMapper.mapToDTO(salon);
         return ResponseEntity.ok(salonDTO1);
@@ -45,8 +46,8 @@ public class SalonController {
     @GetMapping()
     public ResponseEntity<List<SalonDTO>> getSalons() throws Exception {
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setId(1L);
         List<Salon> salons = salonService.getAllSalons();
 
         List<SalonDTO> salonDTOS = salons.stream().map((salon)->
@@ -56,5 +57,59 @@ public class SalonController {
         }).toList();
 
         return ResponseEntity.ok(salonDTOS);
+
     }
+
+
+    @GetMapping("/{salonId}")
+    public ResponseEntity<SalonDTO> getSalonById(
+        @PathVariable Long salonId
+    ) throws Exception {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setId(1L);
+        Salon salon = salonService.getSalonById(salonId);
+
+        SalonDTO salonDTO = SalonMapper.mapToDTO(salon);
+        return ResponseEntity.ok(salonDTO);
+
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SalonDTO>> searchSalon(
+        @RequestParam String city
+    ) throws Exception {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setId(1L);
+        List<Salon> salons = salonService.searchSalonByCity(city);
+
+        List<SalonDTO> salonDTOS = salons.stream().map((salon)->
+        {
+            SalonDTO salonDTO = SalonMapper.mapToDTO(salon);
+            return salonDTO;
+        }).toList();
+
+        return ResponseEntity.ok(salonDTOS);
+
+    }
+
+
+    public ResponseEntity<SalonDTO> getSalonByOwnerId(
+        @PathVariable Long ownerId
+    ) throws Exception {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
+        Salon salon = salonService.getSalonByOwnerId(ownerId);
+        SalonDTO salonDTO = SalonMapper.mapToDTO(salon);
+        return ResponseEntity.ok(salonDTO);
+    }
+
+
+
+
+
+
+
+
+
 }

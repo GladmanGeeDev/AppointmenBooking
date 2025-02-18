@@ -1,5 +1,6 @@
 package com.goneka.service.impl;
 
+import com.goneka.exception.ResourceNotFoundException;
 import com.goneka.model.Salon;
 import com.goneka.payload.dto.SalonDTO;
 import com.goneka.payload.dto.UserDTO;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+
 
 
 @Service
@@ -29,32 +32,33 @@ public class SalonServiceImpl implements SalonService {
         salon.setOwnerId(req.getOwnerId());
         salon.setOpenTime(req.getOpenTime());
         salon.setCloseTime(req.getCloseTime());
+        salon.setPhoneNumber(req.getPhoneNumber());
 
         return salonRepository.save(salon);
     }
 
     @Override
     public Salon updateSalon(SalonDTO salon, UserDTO user, Long salonId) {
+        Salon existingSalon = salonRepository.findById(salonId)
+            .orElseThrow(() -> new ResourceNotFoundException("Salon not found with id: " + salonId));
 
-        Salon existingSalon = salonRepository.findById(salonId).orElse(null);
-
-        if (existingSalon != null && salon.getOwnerId().equals(user.getId())) {
-            existingSalon.setName(salon.getName());
-            existingSalon.setAddress(salon.getAddress());
-            existingSalon.setCity(salon.getCity());
-            existingSalon.setEmail(salon.getEmail());
-            existingSalon.setImages(salon.getImages());
-            existingSalon.setOwnerId(salon.getOwnerId());
-            existingSalon.setPhoneNumber(salon.getPhoneNumber());
-            existingSalon.setOpenTime(salon.getOpenTime());
-            existingSalon.setCloseTime(salon.getCloseTime());
-
-            // ✅ Save and return the updated salon
-            return salonRepository.save(existingSalon);
+        if (existingSalon == null) {
+            throw new RuntimeException("Salon not found");
         }
 
-        throw new RuntimeException("Salon not found or Unauthorized");
+
+        existingSalon.setName(salon.getName());
+        existingSalon.setAddress(salon.getAddress());
+        existingSalon.setCity(salon.getCity());
+        existingSalon.setEmail(salon.getEmail());
+        existingSalon.setImages(salon.getImages());
+        existingSalon.setPhoneNumber(salon.getPhoneNumber());
+        existingSalon.setOpenTime(salon.getOpenTime());
+        existingSalon.setCloseTime(salon.getCloseTime());
+
+        return salonRepository.save(existingSalon);
     }
+
 
 
     @Override
