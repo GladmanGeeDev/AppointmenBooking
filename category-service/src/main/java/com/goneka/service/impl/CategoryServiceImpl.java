@@ -27,9 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Set<Category> getAllCategoriesBySalon(Long salonDTO) {
-        return categoryRepository.findBySalonId(salonDTO.getId());
+
+    public Set<Category> getAllCategoriesBySalon(Long salonId) {
+        return categoryRepository.findBySalonId(salonId);
     }
+
 
 
     @Override
@@ -46,13 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategoryById(Long id, Long salonId) throws Exception {
         Category category = getCategoryById(id);
-        if(category.getSalonId().equals(salonId)) {
-            throw new Exception("No permission to delete category with id" + id);
+        if (!category.getSalonId().equals(salonId)) { // Fix: Added negation
+            throw new Exception("No permission to delete category with id " + id);
         }
         categoryRepository.deleteById(id);
-
-
-
-
     }
+
 }
